@@ -59,6 +59,4 @@ public class UserServiceImpl implements UserService {
     public Page<User> findUsersByUsernameStartingWith(Pageable pageable, String keyUsername) {
         return (Page<User>) userRepository.findUsersByUsernameStartingWith(pageable, keyUsername);
     }
-
-
 }

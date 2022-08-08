@@ -69,7 +69,6 @@ public class UserController {
         return "create";
     }
 
-
     @PostMapping("/create")
     public String saveUser(@Valid User user, BindingResult bindingResult, Model model) {
         Optional<User> user1 = userService.findUserByUsername(user.getUsername());
