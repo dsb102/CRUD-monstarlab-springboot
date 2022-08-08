@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Manager</title>
+
+    <!--  Start Bootstrap  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <!--  End Bootstrap  -->
+
+    <!-- Import Ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Import Ajax -->
+</head>
+<body>
+<div class="container">
+    <h1>Hello Dũng Sobin</h1>
+    <form action="#" th:action="@{/search}" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="Input username"
+                   aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                <a th:href="@{/create}" class="btn btn-outline-secondary" role="button">Create</a>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user: ${users.content}">
+            <td scope="row" th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${#temporals.format(user.birthday, 'dd/MM/yyyy')}"></td>
+            <td><a class="btn btn-primary" th:href="@{/edit(id=${user.id})}">Edit</a></td>
+            <td><a class="btn btn-primary" style="background-color: red"
+                   onclick="return confirm('Có muốn xóa user này không?')"
+                   th:href="@{/delete(id=${user.id})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/(page=0, keyword=${keyword})}" aria-label="Previous">
+                    First
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{/(page=${users.number} - 1, keyword=${keyword})}">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{/(page=${users.number} + 1, keyword=${keyword})}">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{/(page=${users.totalPages} - 1, keyword=${keyword})}" aria-label="Next">
+                    Last
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
