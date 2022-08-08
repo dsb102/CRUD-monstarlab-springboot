@@ -4,41 +4,39 @@ import com.monstarlab.webuser.model.User;
 import com.monstarlab.webuser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class UserController {
+
+    private static final String PAGE = "0"; // default page
+    private static final String SIZE = "7"; // default size on page
+    private static final String SORT = "ASC"; // default sort Ascending
+
     @Autowired
     private UserService userService;
 
     @GetMapping({"/", "/home", "/search"})
     public String home(Model model,
                        @RequestParam(name = "keyword", required = false) String keyword,
-                       @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                       @RequestParam(name = "size", required = false, defaultValue = "7") Integer size,
-                       @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
-        page = page < 0 ? 0 : page;
-        Sort sortable = Sort.by("id").ascending();;
-        if (sort.equals("DESC")) {
-            sortable = Sort.by("id").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sortable);
+                       @RequestParam(name = "page", required = false, defaultValue = PAGE) String page,
+                       @RequestParam(name = "size", required = false, defaultValue = SIZE) String size,
+                       @RequestParam(name = "sort", required = false, defaultValue = SORT) String sort) {
         if (keyword != null) {
-            Page<User> userList = userService.findUsersByUsernameStartingWith(pageable, keyword);
+            Page<User> userList = userService.findUsersByUsernameStartingWith(Integer.parseInt(page), Integer.parseInt(size), sort, keyword);
             model.addAttribute("users", userList);
             model.addAttribute("keyword", keyword);
         } else {
-            Page<User> userList = userService.getAllUsers(pageable);
+            Page<User> userList = userService.getAllUsers(Integer.parseInt(page), Integer.parseInt(size), sort);
             model.addAttribute("users", userList);
         }
         return "index";

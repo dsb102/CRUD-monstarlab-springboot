@@ -20,7 +20,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    Page<User> getAllUsers(Pageable pageable);
+    Page<User> getAllUsers(Integer page, Integer size, String sortable);
 
-    Page<User> findUsersByUsernameStartingWith(Pageable pageable, String keyUsername);
+    Page<User> findUsersByUsernameStartingWith(Integer page, Integer size, String sortable, String keyUsername);
 }
